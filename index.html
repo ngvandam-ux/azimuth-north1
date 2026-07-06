@@ -265,6 +265,10 @@ h1 em{font-style:italic;font-weight:400;color:var(--brass)}
 .insight p{font-size:15px;line-height:1.6;color:rgba(18,22,29,.68);flex:1}
 .insight .read{font-family:var(--mono);font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--oxblood);transition:color .25s,transform .25s}
 .insight:hover .read{color:var(--brass)}
+.insight .in-tag.ext{color:var(--sepia)}
+.insight .src{font-family:var(--mono);font-size:10.5px;letter-spacing:.08em;color:var(--sepia)}
+.in-sub{font-family:var(--mono);font-size:11px;letter-spacing:.28em;text-transform:uppercase;color:var(--sepia);display:flex;align-items:center;gap:14px}
+.in-sub::after{content:"";flex:1;height:1px;background:var(--line)}
 @media(max-width:900px){.insight-grid{grid-template-columns:1fr}}
 
 /* ---------- cta ---------- */
@@ -613,27 +617,46 @@ footer a:hover{color:var(--brass)}
   <div class="wrap">
     <div class="plate rv">Plate V · Dispatches</div>
     <h2 class="title rv rv-d1">Notes from <em>the field.</em></h2>
-    <p class="lede rv rv-d2" style="margin-top:24px">Working perspective on where software and AI actually earn their keep in a small or mid-size operation — and where they don't. Published on LinkedIn.</p>
-    <div class="insight-grid">
-      <a class="insight rv" href="https://www.linkedin.com/in/nicholasvandam/" target="_blank" rel="noopener">
-        <span class="in-tag">◆ Field dispatch</span>
+    <p class="lede rv rv-d2" style="margin-top:24px">Our own field notes, plus other reporting worth your time on where software and AI actually earn their keep in a small or mid-size operation.</p>
+
+    <div class="in-sub rv rv-d2" style="margin-top:56px">From the library</div>
+    <div class="insight-grid" style="margin-top:20px">
+      <a class="insight rv" href="articles/where-ai-saves-smb-hours.html">
+        <span class="in-tag">◆ Field note</span>
         <h3>Where AI actually saves SMB hours — and where it just demos well</h3>
         <p>A practical map of the tasks worth automating first, and the ones that quietly cost more than they save.</p>
-        <span class="read">Read on LinkedIn →</span>
+        <span class="read">Read the article →</span>
       </a>
-      <a class="insight rv rv-d1" href="https://www.linkedin.com/in/nicholasvandam/" target="_blank" rel="noopener">
-        <span class="in-tag">◆ Field dispatch</span>
+      <a class="insight rv rv-d1" href="articles/the-swivel-chair-tax.html">
+        <span class="in-tag">◆ Field note</span>
         <h3>The swivel-chair tax: what disconnected systems really cost</h3>
         <p>Re-keying the same data across tools never shows up on an invoice — yet it's one of the biggest drags on a growing operation.</p>
-        <span class="read">Read on LinkedIn →</span>
-      </a>
-      <a class="insight rv rv-d2" href="https://www.linkedin.com/in/nicholasvandam/" target="_blank" rel="noopener">
-        <span class="in-tag">◆ Field dispatch</span>
-        <h3>Buy, build, or fit: choosing software that matches your ground</h3>
-        <p>Why "rip and replace" so often backfires for small and mid-size firms — and how fitting to your workflow beats bending to a platform.</p>
-        <span class="read">Read on LinkedIn →</span>
+        <span class="read">Read the article →</span>
       </a>
     </div>
+
+    <div class="in-sub rv" style="margin-top:56px">Recommended reading</div>
+    <div class="insight-grid" style="margin-top:20px">
+      <a class="insight rv" href="https://hbr.org/2026/02/whats-the-roi-on-ai" target="_blank" rel="noopener">
+        <span class="in-tag ext">↗ Harvard Business Review</span>
+        <h3>What's the ROI on AI?</h3>
+        <p>Why "time saved" so often fails to become real business value — and what actually separates AI pilots that pay off from the ones that quietly evaporate.</p>
+        <span class="read">Read at hbr.org →</span>
+      </a>
+      <a class="insight rv rv-d1" href="https://www.redevolution.com/blog/the-real-cost-of-disconnected-business-systems" target="_blank" rel="noopener">
+        <span class="in-tag ext">↗ Red Evolution</span>
+        <h3>The Real Cost of Disconnected Business Systems</h3>
+        <p>How disconnected tools quietly drain time and money in a growing operation, and where to start looking for the leaks.</p>
+        <span class="read">Read at redevolution.com →</span>
+      </a>
+      <a class="insight rv rv-d2" href="https://www.quickbase.com/blog/build-vs-buy-software" target="_blank" rel="noopener">
+        <span class="in-tag ext">↗ Quickbase</span>
+        <h3>Build vs. Buy Software: Knowing When to Purchase and When to Customize</h3>
+        <p>A field guide to when off-the-shelf software fits — and when it's worth building something that matches how you actually work.</p>
+        <span class="read">Read at quickbase.com →</span>
+      </a>
+    </div>
+
     <div class="rv rv-d2" style="margin-top:46px;display:flex;gap:28px;align-items:center;flex-wrap:wrap">
       <a class="btn btn-solid" href="library.html" data-magnetic><span>Browse the library</span> <span class="arrow">→</span></a>
       <a href="https://www.linkedin.com/in/nicholasvandam/" target="_blank" rel="noopener" style="font-family:var(--mono);font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:var(--oxblood);text-decoration:none;border-bottom:1px solid var(--brass-dim);padding-bottom:2px">Follow on LinkedIn →</a>
