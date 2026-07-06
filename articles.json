@@ -1,0 +1,37 @@
+{
+  "site": {
+    "name": "Azimuth North",
+    "baseUrl": "https://azimuth-north.com",
+    "author": "Nick Vandam",
+    "description": "Veteran-led consulting and AI implementation for small and mid-size business."
+  },
+  "_notes": "Single source of truth for the Library. 'published' + 'publishDate' drive the future drip-rotation: a scheduled Netlify build can flip 'published' to true once publishDate has arrived. Swap the scaffolded articles for real content; keep slugs URL-safe.",
+  "articles": [
+    {
+      "slug": "where-ai-saves-smb-hours",
+      "title": "Where AI Actually Saves SMB Hours — and Where It Just Demos Well",
+      "metaDescription": "A practical field guide for small and mid-size businesses: the tasks where AI reliably returns hours every week, and the ones where it quietly costs more than it saves.",
+      "keywords": "AI for small business, AI ROI, SMB automation, where AI saves time, practical AI implementation",
+      "topic": "AI Strategy",
+      "summary": "The tasks worth automating first, the ones that quietly cost more than they save, and a simple test for telling them apart.",
+      "date": "2026-06-18",
+      "publishDate": "2026-06-18",
+      "published": true,
+      "readingTime": "6 min read",
+      "linkedin": "https://www.linkedin.com/in/nicholasvandam/"
+    },
+    {
+      "slug": "the-swivel-chair-tax",
+      "title": "The Swivel-Chair Tax: What Disconnected Systems Really Cost",
+      "metaDescription": "Re-keying the same data across disconnected tools never shows up on an invoice — yet it's one of the biggest hidden drags on a growing small or mid-size operation. Here's how to find it and remove it.",
+      "keywords": "systems integration, disconnected software, data re-entry cost, SMB operations, workflow automation",
+      "topic": "Operations",
+      "summary": "The hidden cost of re-keying data between tools that don't talk — and how to measure it before you fix it.",
+      "date": "2026-05-27",
+      "publishDate": "2026-05-27",
+      "published": true,
+      "readingTime": "5 min read",
+      "linkedin": null
+    }
+  ]
+}

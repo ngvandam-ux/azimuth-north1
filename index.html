@@ -10,6 +10,9 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400;1,9..144,500&family=Space+Grotesk:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<!-- warm up the next pages so navigation feels instant -->
+<link rel="prefetch" href="library.html">
+<link rel="prefetch" href="about.html">
 <style>
 :root{
   --ink:#12161d;          /* midnight chart */
@@ -36,7 +39,7 @@ body{font-family:var(--serif);background:var(--paper);color:var(--ink);overflow-
 body::after{content:"";position:fixed;inset:0;z-index:98;pointer-events:none;opacity:.3;mix-blend-mode:overlay;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2'/%3E%3CfeColorMatrix values='0 0 0 0 0.5 0 0 0 0 0.45 0 0 0 0 0.35 0 0 0 .35 0'/%3E%3C/filter%3E%3Crect width='240' height='240' filter='url(%23n)'/%3E%3C/svg%3E")}
 
 /* ---------- preloader ---------- */
-#loader{position:fixed;inset:0;z-index:100;background:var(--ink);display:flex;align-items:center;justify-content:center;flex-direction:column;gap:30px;transition:transform .9s cubic-bezier(.76,0,.24,1)}
+#loader{position:fixed;inset:0;z-index:100;background:var(--ink);display:flex;align-items:center;justify-content:center;flex-direction:column;gap:30px;transition:transform .5s cubic-bezier(.76,0,.24,1)}
 #loader.done{transform:translateY(-100%)}
 #loader .dial{width:150px;height:150px}
 #loader .dial svg{width:100%;height:100%}
@@ -96,7 +99,15 @@ nav .wrap{display:flex;align-items:center;justify-content:space-between}
 
 /* ---------- hero ---------- */
 #hero{min-height:100svh;background:var(--ink);color:var(--paper);display:flex;align-items:center;overflow:hidden}
-#terrain{position:absolute;inset:0;width:100%;height:100%;display:block}
+/* AI-generated survey chart, sits quietly beneath the live terrain for depth */
+#hero .chart-bg{position:absolute;inset:-28px;z-index:0;pointer-events:none;
+  background-image:linear-gradient(90deg,rgba(18,22,29,.98) 0%,rgba(18,22,29,.9) 40%,rgba(18,22,29,.55) 100%),url("assets/hero-bg.jpg");
+  background-size:cover;background-position:center;opacity:.45;filter:blur(3px) saturate(.9)}
+/* extra floor-to-ceiling vignette so the moving contours + headline stay the focus */
+#hero .chart-bg::after{content:"";position:absolute;inset:0;background:radial-gradient(130% 108% at 68% 42%,transparent 24%,rgba(18,22,29,.72) 100%)}
+/* on stacked/narrow layouts text spans full width, so keep the chart quieter + evenly dark */
+@media(max-width:820px){#hero .chart-bg{opacity:.38;background-image:linear-gradient(180deg,rgba(18,22,29,.78) 0%,rgba(18,22,29,.55) 60%,rgba(18,22,29,.7) 100%),url("assets/hero-bg.jpg")}}
+#terrain{position:absolute;inset:0;width:100%;height:100%;display:block;z-index:1}
 #hero .hud{position:absolute;font-family:var(--mono);font-size:10.5px;letter-spacing:.24em;color:rgba(239,230,208,.5);display:flex;gap:10px;align-items:center;text-transform:uppercase}
 #hero .hud .tick{width:22px;height:1px;background:var(--brass-dim)}
 .hud-tl{top:100px;left:32px}
@@ -125,12 +136,12 @@ h1 em{font-style:italic;font-weight:400;color:var(--brass)}
 .btn-ghost{color:var(--paper);border:1px solid rgba(239,230,208,.35);outline:1px solid transparent;outline-offset:4px;transition:border-color .25s,color .25s,outline-color .25s}
 .btn-ghost:hover{border-color:var(--brass);outline-color:var(--brass-dim);color:var(--brass)}
 .scroll-hint{position:absolute;bottom:34px;left:50%;transform:translateX(-50%);z-index:2;font-family:var(--mono);font-size:10px;letter-spacing:.34em;color:rgba(239,230,208,.4);display:flex;flex-direction:column;align-items:center;gap:10px}
-.scroll-hint .line{width:1px;height:44px;background:linear-gradient(var(--mint),transparent);animation:drop 2.2s infinite cubic-bezier(.76,0,.24,1)}
+.scroll-hint .line{width:1px;height:44px;background:linear-gradient(var(--mint),transparent)}
 @keyframes drop{0%{transform:scaleY(0);transform-origin:top}45%{transform:scaleY(1);transform-origin:top}55%{transform:scaleY(1);transform-origin:bottom}100%{transform:scaleY(0);transform-origin:bottom}}
 
 /* ---------- expedition seal ---------- */
 .seal{position:absolute;right:56px;bottom:110px;z-index:2;width:150px;height:150px;opacity:.9}
-.seal .spin{animation:sealspin 28s linear infinite;transform-origin:50% 50%}
+.seal .spin{transform-origin:50% 50%}
 @keyframes sealspin{to{transform:rotate(360deg)}}
 .seal text{font-family:var(--mono);font-size:10px;letter-spacing:.18em;fill:var(--brass)}
 @media(max-width:1100px){.seal{right:32px;bottom:90px;width:120px;height:120px}}
@@ -148,7 +159,7 @@ h1 em{font-style:italic;font-weight:400;color:var(--brass)}
 .band{background:var(--ink);border-top:1px solid var(--line-dark);border-bottom:1px solid var(--line-dark);overflow:hidden;padding:18px 0;position:relative}
 .band::before,.band::after{content:"";position:absolute;left:0;right:0;height:1px;background:var(--brass-dim);opacity:.5}
 .band::before{top:5px}.band::after{bottom:5px}
-.band .track{display:flex;width:max-content;animation:scrollx 30s linear infinite;font-family:var(--disp);font-size:13px;letter-spacing:.42em;color:rgba(239,230,208,.6);white-space:nowrap;text-transform:uppercase}
+.band .track{display:flex;justify-content:center;flex-wrap:wrap;width:100%;font-family:var(--disp);font-size:13px;letter-spacing:.42em;color:rgba(239,230,208,.6);white-space:nowrap;text-transform:uppercase}
 .band .track span i{font-style:normal;color:var(--brass);margin:0 34px}
 @keyframes scrollx{to{transform:translateX(-50%)}}
 
@@ -238,6 +249,20 @@ h1 em{font-style:italic;font-weight:400;color:var(--brass)}
 .trust-card p{font-size:15.5px;line-height:1.6;color:rgba(18,22,29,.68)}
 .trust-card .mark{font-family:var(--disp);font-style:italic;font-size:16px;color:var(--oxblood)}
 @media(max-width:820px){.trust-grid{grid-template-columns:1fr}}
+
+/* ---------- insights / dispatches ---------- */
+#insights{background:var(--paper-2)}
+.insight-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;margin-top:64px}
+.insight{display:flex;flex-direction:column;gap:14px;background:var(--paper);border:1px solid var(--line);padding:34px 30px 30px;text-decoration:none;color:inherit;position:relative;transition:transform .45s cubic-bezier(.22,1,.36,1),box-shadow .45s,border-color .45s}
+.insight::after{content:"";position:absolute;inset:5px;border:1px solid transparent;transition:border-color .45s;pointer-events:none}
+.insight:hover{transform:translateY(-8px);box-shadow:0 26px 48px -22px rgba(46,38,26,.4);border-color:var(--brass)}
+.insight:hover::after{border-color:rgba(191,155,86,.4)}
+.insight .in-tag{font-family:var(--mono);font-size:10px;letter-spacing:.28em;text-transform:uppercase;color:var(--brass);display:flex;align-items:center;gap:9px}
+.insight h3{font-family:var(--disp);font-size:22px;font-weight:500;line-height:1.22;color:var(--ink)}
+.insight p{font-size:15px;line-height:1.6;color:rgba(18,22,29,.68);flex:1}
+.insight .read{font-family:var(--mono);font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--oxblood);transition:color .25s,transform .25s}
+.insight:hover .read{color:var(--brass)}
+@media(max-width:900px){.insight-grid{grid-template-columns:1fr}}
 
 /* ---------- cta ---------- */
 #cta{background:var(--ink);color:var(--paper);text-align:center;overflow:hidden}
@@ -355,9 +380,6 @@ footer a:hover{color:var(--brass)}
   <div class="motto">By observation, not assumption.</div>
 </div>
 
-<!-- cursor reticle -->
-<div id="reticle" aria-hidden="true"><div class="ring"></div></div>
-
 <nav id="nav">
   <div class="wrap">
     <a class="brand" href="#hero" aria-label="Azimuth home">
@@ -368,28 +390,26 @@ footer a:hover{color:var(--brass)}
           <circle cx="100" cy="22" r="6" fill="#a03325"/>
         </g>
       </svg>
-      <span class="wm-stack"><span class="wm">AZIMUTH&nbsp;NORTH<sup class="deg">°</sup></span><span class="wm-sub">Consulting + AI Implementation</span></span>
+      <span class="wm-stack"><span class="wm">AZIMUTH&nbsp;NORTH<sup class="deg">°</sup></span><span class="wm-sub">Veteran-Led · Consulting + AI Implementation</span></span>
     </a>
     <div class="nav-links">
       <a href="#difference">The Difference</a>
       <a href="#capabilities">What we do</a>
       <a href="#process">How we work</a>
+      <a href="#insights">Insights</a>
+      <a href="library.html">Library</a>
       <a href="about.html">About</a>
-      <a href="#cta" class="nav-cta">Book a call</a>
+      <a href="https://cal.com/nicholas-vandam-gm8vid/30min" target="_blank" rel="noopener" class="nav-cta" data-cal-namespace="30min" data-cal-link="nicholas-vandam-gm8vid/30min" data-cal-config='{"layout":"month_view"}'>Book a call</a>
     </div>
   </div>
 </nav>
 
 <!-- hero -->
 <section id="hero">
+  <div class="chart-bg" aria-hidden="true"></div>
   <canvas id="terrain" aria-hidden="true"></canvas>
-  <div class="hud hud-tl"><span class="tick"></span>Lat 44°58′40″ N · Long 93°15′54″ W</div>
-  <div class="hud hud-tr">Surveyed & drawn MMXXVI<span class="tick"></span></div>
-  <div class="hud hud-bl"><span class="tick"></span>Bearing <span id="brg-live">047.0°</span></div>
-  <div class="hud hud-br">Terrain scan <span id="scan-state" style="color:var(--mint)">active</span><span class="tick"></span></div>
 
   <div class="wrap hero-inner">
-    <div class="hero-plate rv in">Veteran-led · Consulting + AI implementation for small &amp; mid-size business</div>
     <h1 id="headline">
       <span class="word"><span>Software</span></span>
       <span class="word"><span>fitted&nbsp;to</span></span>
@@ -399,36 +419,16 @@ footer a:hover{color:var(--brass)}
     </h1>
     <p class="hero-sub rv rv-d2 in">Azimuth North is a veteran-led consulting and AI-implementation firm. We find the friction in your processes and systems, then build the software and AI tooling that removes it — fitted to how your business already runs.</p>
     <div class="cta-row rv rv-d3 in">
-      <a class="btn btn-solid" href="#cta" data-magnetic><span>Book a free consult</span> <span class="arrow">→</span></a>
+      <a class="btn btn-solid" href="https://cal.com/nicholas-vandam-gm8vid/30min" target="_blank" rel="noopener" data-cal-namespace="30min" data-cal-link="nicholas-vandam-gm8vid/30min" data-cal-config='{"layout":"month_view"}' data-magnetic><span>Schedule a call</span> <span class="arrow">→</span></a>
       <a class="btn btn-ghost" href="#process" data-magnetic>How we work</a>
     </div>
-  </div>
-  <div class="scroll-hint"><span>Proceed</span><span class="line"></span></div>
-
-  <!-- rotating expedition seal -->
-  <div class="seal" aria-hidden="true">
-    <svg viewBox="0 0 150 150">
-      <defs><path id="sealpath" d="M75,75 m-58,0 a58,58 0 1,1 116,0 a58,58 0 1,1 -116,0"/></defs>
-      <g class="spin">
-        <text><textPath href="#sealpath">AZIMUTH NORTH · FIELD SURVEY · VETERAN-LED ·</textPath></text>
-      </g>
-      <g color="#bf9b56" transform="translate(35 35) scale(.4)"><use href="#rose"/></g>
-      <line x1="75" y1="75" x2="91" y2="59" stroke="#37d3b4" stroke-width="2" stroke-linecap="round"/>
-    </svg>
-  </div>
-
-  <!-- cartographer's note -->
-  <div class="anno anno-hero" aria-hidden="true">
-    new ground, this way
-    <svg width="74" height="30" viewBox="0 0 74 30"><path d="M3 6 C 22 22, 44 26, 66 16 M58 12 L67 16 L60 23"/></svg>
   </div>
 </section>
 
 <!-- engraved band -->
 <div class="band" aria-hidden="true">
   <div class="track">
-    <span>Map<i>◆</i>Fit<i>◆</i>Connect<i>◆</i>Visualize<i>◆</i>Sustain<i>◆</i>Map<i>◆</i>Fit<i>◆</i>Connect<i>◆</i>Visualize<i>◆</i>Sustain<i>◆</i></span>
-    <span>Map<i>◆</i>Fit<i>◆</i>Connect<i>◆</i>Visualize<i>◆</i>Sustain<i>◆</i>Map<i>◆</i>Fit<i>◆</i>Connect<i>◆</i>Visualize<i>◆</i>Sustain<i>◆</i></span>
+    <span>Map<i>◆</i>Fit<i>◆</i>Connect<i>◆</i>Visualize<i>◆</i>Sustain</span>
   </div>
 </div>
 
@@ -590,6 +590,39 @@ footer a:hover{color:var(--brass)}
   </div>
 </section>
 
+<!-- insights / dispatches -->
+<section id="insights" class="section-pad">
+  <div class="wrap">
+    <div class="plate rv">Plate V · Dispatches</div>
+    <h2 class="title rv rv-d1">Notes from <em>the field.</em></h2>
+    <p class="lede rv rv-d2" style="margin-top:24px">Working perspective on where software and AI actually earn their keep in a small or mid-size operation — and where they don't. Published on LinkedIn.</p>
+    <div class="insight-grid">
+      <a class="insight rv" href="https://www.linkedin.com/in/nicholasvandam/" target="_blank" rel="noopener">
+        <span class="in-tag">◆ Field dispatch</span>
+        <h3>Where AI actually saves SMB hours — and where it just demos well</h3>
+        <p>A practical map of the tasks worth automating first, and the ones that quietly cost more than they save.</p>
+        <span class="read">Read on LinkedIn →</span>
+      </a>
+      <a class="insight rv rv-d1" href="https://www.linkedin.com/in/nicholasvandam/" target="_blank" rel="noopener">
+        <span class="in-tag">◆ Field dispatch</span>
+        <h3>The swivel-chair tax: what disconnected systems really cost</h3>
+        <p>Re-keying the same data across tools never shows up on an invoice — yet it's one of the biggest drags on a growing operation.</p>
+        <span class="read">Read on LinkedIn →</span>
+      </a>
+      <a class="insight rv rv-d2" href="https://www.linkedin.com/in/nicholasvandam/" target="_blank" rel="noopener">
+        <span class="in-tag">◆ Field dispatch</span>
+        <h3>Buy, build, or fit: choosing software that matches your ground</h3>
+        <p>Why "rip and replace" so often backfires for small and mid-size firms — and how fitting to your workflow beats bending to a platform.</p>
+        <span class="read">Read on LinkedIn →</span>
+      </a>
+    </div>
+    <div class="rv rv-d2" style="margin-top:46px;display:flex;gap:28px;align-items:center;flex-wrap:wrap">
+      <a class="btn btn-solid" href="library.html" data-magnetic><span>Browse the library</span> <span class="arrow">→</span></a>
+      <a href="https://www.linkedin.com/in/nicholasvandam/" target="_blank" rel="noopener" style="font-family:var(--mono);font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:var(--oxblood);text-decoration:none;border-bottom:1px solid var(--brass-dim);padding-bottom:2px">Follow on LinkedIn →</a>
+    </div>
+  </div>
+</section>
+
 <!-- cta -->
 <section id="cta" class="section-pad">
   <canvas id="ctaTerrain" aria-hidden="true"></canvas>
@@ -597,7 +630,8 @@ footer a:hover{color:var(--brass)}
     <h2 class="rv">Ready to set<br>a <em>bearing?</em></h2>
     <p class="rv rv-d1">If you run a small or mid-size business and suspect your processes, systems, or data could work harder — that first call is free and direct. Tell us how your operation runs today; we'll tell you honestly where software and AI can move the needle, and where they can't. <a href="about.html" style="color:var(--brass);text-decoration:none;border-bottom:1px solid var(--brass-dim)">Meet the team →</a></p>
     <div class="rv rv-d2">
-      <a class="btn btn-solid" href="mailto:hello@azimuth-north.com" data-magnetic><span>hello@azimuth-north.com</span> <span class="arrow">→</span></a>
+      <a class="btn btn-solid" href="https://cal.com/nicholas-vandam-gm8vid/30min" target="_blank" rel="noopener" data-cal-namespace="30min" data-cal-link="nicholas-vandam-gm8vid/30min" data-cal-config='{"layout":"month_view"}' data-magnetic><span>Book a 30-minute call</span> <span class="arrow">→</span></a>
+      <p style="margin-top:24px;font-family:var(--mono);font-size:12px;letter-spacing:.12em;color:rgba(239,230,208,.55)">or email <a href="mailto:hello@azimuth-north.com" style="color:var(--brass);text-decoration:none;border-bottom:1px solid var(--brass-dim)">hello@azimuth-north.com</a></p>
     </div>
   </div>
 </section>
@@ -729,59 +763,40 @@ function TerrainField(canvas, opts){
   }
   if(reduce){ draw(1234, 0); } else { raf = requestAnimationFrame(loop); }
 }
-TerrainField(document.getElementById('terrain'), {cell:16, levels:9, scan:true});
+TerrainField(document.getElementById('terrain'), {cell:16, levels:9, scan:false});
 TerrainField(document.getElementById('ctaTerrain'), {cell:20, levels:7, baseAlpha:.1, mouse:true});
 
 /* ================= preloader ================= */
 const loader = document.getElementById('loader');
-if(reduce){
+if(reduce || sessionStorage.getItem('az_seen')){
+  // already seen this visit (or reduced motion) — skip straight in
+  loader.style.display = 'none';
   document.body.classList.add('loaded');
 } else {
+  try{ sessionStorage.setItem('az_seen','1'); }catch(e){}
   const arc = document.getElementById('dialArc');
   const needle = document.getElementById('dialNeedle');
   const num = document.getElementById('brgNum');
-  // physical compass settle: clockwise sweep, underdamped spring, real overshoot
-  const target = 47.0 + 720;          // two clockwise turns, then lock on 047.0
-  let d = 0, v = 520, last = performance.now(), finished = false;
-  const k = 16, c = 4.6;              // c < 2*sqrt(k) -> oscillates like a damped needle
-  arc.style.transition = 'stroke-dashoffset .9s cubic-bezier(.22,1,.36,1)';
-  let arcStarted = false;
+  // a quick, small compass sweep to bearing 047 with a touch of overshoot
+  const DUR = 620, t0 = performance.now();
+  const backOut = t => { const c1=1.9, c3=c1+1; return 1 + c3*Math.pow(t-1,3) + c1*Math.pow(t-1,2); };
+  let finished = false;
   function finish(){
     if(finished) return; finished = true;
     needle.setAttribute('transform', 'rotate(47 100 100)');
     num.textContent = '047.0';
-    setTimeout(()=>{ loader.classList.add('done'); document.body.classList.add('loaded'); }, 320);
+    arc.style.transition = 'stroke-dashoffset .4s cubic-bezier(.22,1,.36,1)';
+    arc.style.strokeDashoffset = '0';
+    setTimeout(()=>{ loader.classList.add('done'); document.body.classList.add('loaded'); }, 150);
   }
-  (function spin(now){
-    let dt = Math.min((now-last)/1000, .033); last = now;
-    v += (k*(target-d) - c*v)*dt;
-    d += v*dt;
-    const shown = ((d%360)+360)%360;
+  (function sweep(now){
+    const t = Math.min((now - t0)/DUR, 1);
+    const shown = 47 * backOut(t);
     needle.setAttribute('transform', `rotate(${shown} 100 100)`);
-    num.textContent = shown < 100 ? ('0'+shown.toFixed(1)).slice(-5) : shown.toFixed(1);
-    // bearing arc inks in on the final approach, as the needle first nears the mark
-    if(!arcStarted && target-d < 90){ arcStarted = true; arc.style.strokeDashoffset = '0'; }
-    if(Math.abs(target-d) < .05 && Math.abs(v) < .5) finish();
-    else requestAnimationFrame(spin);
-  })(last);
-  setTimeout(finish, 3200); // hard cap so the door always opens
-}
-
-/* ================= reticle cursor ================= */
-const ret = document.getElementById('reticle');
-if(matchMedia('(hover:hover)').matches && !reduce){
-  document.body.classList.add('has-cursor');
-  let rx=0,ry=0,px=0,py=0;
-  addEventListener('mousemove',e=>{px=e.clientX;py=e.clientY;});
-  (function follow(){
-    rx+=(px-rx)*.2; ry+=(py-ry)*.2;
-    ret.style.left=rx+'px'; ret.style.top=ry+'px';
-    requestAnimationFrame(follow);
-  })();
-  document.querySelectorAll('a,button').forEach(el=>{
-    el.addEventListener('mouseenter',()=>ret.classList.add('hot'));
-    el.addEventListener('mouseleave',()=>ret.classList.remove('hot'));
-  });
+    num.textContent = ('0'+Math.abs(shown).toFixed(1)).slice(-5);
+    if(t < 1) requestAnimationFrame(sweep); else finish();
+  })(t0);
+  setTimeout(finish, 850); // hard cap so the door always opens
 }
 
 /* ================= magnetic buttons ================= */
@@ -812,7 +827,7 @@ addEventListener('scroll',()=>{
 
 /* ================= live bearing readout drifts ================= */
 const brgLive = document.getElementById('brg-live');
-if(!reduce) setInterval(()=>{
+if(!reduce && brgLive) setInterval(()=>{
   const v = 47 + Math.sin(Date.now()/3000)*.4;
   brgLive.textContent = ('0'+v.toFixed(1)).slice(-5)+'°';
 },120);
@@ -835,6 +850,13 @@ function procTick(){
 addEventListener('scroll',procTick,{passive:true});
 procTick();
 })();
+</script>
+
+<!-- Cal.com booking popup (opens from any Book button) -->
+<script>
+(function (C, A, L) { let p = function (a, ar) { a.q.push(ar); }; let d = C.document; C.Cal = C.Cal || function () { let cal = C.Cal; let ar = arguments; if (!cal.loaded) { cal.ns = {}; cal.q = cal.q || []; d.head.appendChild(d.createElement("script")).src = A; cal.loaded = true; } if (ar[0] === L) { const api = function () { p(api, arguments); }; const namespace = ar[1]; api.q = api.q || []; if (typeof namespace === "string") { cal.ns[namespace] = cal.ns[namespace] || api; p(cal.ns[namespace], ar); p(cal, ["initNamespace", namespace]); } else p(cal, ar); return; } p(cal, ar); }; })(window, "https://app.cal.com/embed/embed.js", "init");
+Cal("init", "30min", { origin: "https://cal.com" });
+Cal.ns["30min"]("ui", { hideEventTypeDetails: false, layout: "month_view", cssVarsPerTheme: { dark: { "cal-brand": "#bf9b56" }, light: { "cal-brand": "#a03325" } } });
 </script>
 </body>
 </html>

@@ -1,0 +1,4 @@
+# local dev tooling for PDF generation — not part of the deployed site
+node_modules/
+package-lock.json
+package.json

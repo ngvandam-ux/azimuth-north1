@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://azimuth-north.com/sitemap.xml

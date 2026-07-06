@@ -5,6 +5,18 @@
   to = "/about.html"
   status = 200
 
+[[redirects]]
+  from = "/library"
+  to = "/library.html"
+  status = 200
+
+# clean URLs for articles: /articles/slug -> /articles/slug.html
+# (static .html and .pdf files are served directly; this only catches extensionless paths)
+[[redirects]]
+  from = "/articles/*"
+  to = "/articles/:splat.html"
+  status = 200
+
 [[headers]]
   for = "/*"
   [headers.values]
