@@ -22,12 +22,30 @@ nav .wrap{display:flex;align-items:center;justify-content:space-between}
 .brand .wm{font-family:var(--disp);font-weight:600;font-size:19px;letter-spacing:.2em;line-height:1}
 .brand .deg{color:var(--brass);font-weight:400;font-size:.7em;vertical-align:.5em}
 .brand .wm-sub{font-family:var(--mono);font-size:8.5px;letter-spacing:.24em;text-transform:uppercase;color:rgba(242,239,230,.55)}
+.nav-right{display:flex;gap:28px;align-items:center}
 .nav-links{display:flex;gap:28px;align-items:center}
 .nav-links a{color:rgba(239,230,208,.75);text-decoration:none;font-size:13px;font-family:var(--mono);letter-spacing:.14em;text-transform:uppercase;transition:color .25s}
 .nav-links a:hover,.nav-links a.active{color:var(--brass)}
-.nav-cta{border:1px solid var(--brass-dim);outline:1px solid var(--brass-dim);outline-offset:3px;padding:9px 18px;color:var(--paper) !important;transition:border-color .25s,background .25s}
+.nav-cta{position:relative;border:1px solid var(--brass-dim);outline:1px solid var(--brass-dim);outline-offset:3px;padding:9px 18px;color:var(--paper) !important;transition:border-color .25s,background .25s}
+.nav-cta::before{content:"";position:absolute;inset:-8px}
+/* invisible tap-area expansion for small inline links (44x44px min touch target) */
+.tap-target{position:relative;display:inline-block}
+.tap-target::before{content:"";position:absolute;inset:-16px}
 .nav-cta:hover{border-color:var(--brass);background:rgba(191,155,86,.12)}
-@media(max-width:900px){.nav-links a:not(.nav-cta){display:none}.brand .wm-sub{display:none}}
+.nav-toggle{display:none;background:none;border:none;padding:10px;cursor:pointer;flex-direction:column;gap:5px;width:44px;height:44px;align-items:center;justify-content:center;flex-shrink:0}
+.nav-toggle span{display:block;width:22px;height:2px;background:var(--paper);transition:transform .3s cubic-bezier(.22,1,.36,1),opacity .2s}
+nav.open .nav-toggle span:nth-child(1){transform:translateY(7px) rotate(45deg)}
+nav.open .nav-toggle span:nth-child(2){opacity:0}
+nav.open .nav-toggle span:nth-child(3){transform:translateY(-7px) rotate(-45deg)}
+@media(max-width:900px){
+  nav .wrap{position:relative}
+  .brand .wm-sub{display:none}
+  .nav-toggle{display:flex}
+  .nav-links{position:absolute;top:100%;left:0;right:0;flex-direction:column;align-items:stretch;gap:0;background:rgba(18,22,29,.97);border-top:1px solid var(--line-dark);padding:6px 32px 18px;max-height:0;overflow:hidden;transition:max-height .35s cubic-bezier(.22,1,.36,1)}
+  .nav-links a{padding:14px 0;border-bottom:1px solid var(--line-dark);font-size:14px}
+  nav.open .nav-links{max-height:420px}
+}
+@media (prefers-reduced-motion:reduce){.nav-links{transition:none}.nav-toggle span{transition:none}}
 
 /* ---------- buttons ---------- */
 .btn{display:inline-flex;align-items:center;gap:11px;font-family:var(--mono);font-size:12px;letter-spacing:.2em;text-transform:uppercase;text-decoration:none;padding:15px 28px;border-radius:2px}
@@ -52,11 +70,11 @@ nav .wrap{display:flex;align-items:center;justify-content:space-between}
 .lib-card::after{content:"";position:absolute;inset:5px;border:1px solid transparent;transition:border-color .45s;pointer-events:none}
 .lib-card:hover{transform:translateY(-8px);box-shadow:0 26px 48px -22px rgba(46,38,26,.4);border-color:var(--brass)}
 .lib-card:hover::after{border-color:rgba(191,155,86,.4)}
-.lib-card .k{font-family:var(--mono);font-size:10px;letter-spacing:.24em;text-transform:uppercase;color:var(--brass);display:flex;justify-content:space-between;gap:10px}
-.lib-card h3{font-family:var(--disp);font-size:21px;font-weight:500;line-height:1.22;color:var(--ink)}
+.lib-card .k{font-family:var(--mono);font-size:10px;letter-spacing:.24em;text-transform:uppercase;color:var(--sepia);display:flex;justify-content:space-between;gap:10px}
+.lib-card h2{font-family:var(--disp);font-size:21px;font-weight:500;line-height:1.22;color:var(--ink)}
 .lib-card p{font-size:14.5px;line-height:1.6;color:rgba(18,22,29,.68);flex:1}
 .lib-card .foot{display:flex;justify-content:space-between;align-items:center;font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--oxblood);margin-top:4px}
-.lib-card:hover .foot{color:var(--brass)}
+.lib-card:hover .foot{color:var(--sepia)}
 .lib-card .pdf{color:var(--sepia)}
 @media(max-width:900px){.lib-grid{grid-template-columns:1fr}}
 

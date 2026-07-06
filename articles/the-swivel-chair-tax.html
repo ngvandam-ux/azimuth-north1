@@ -43,16 +43,21 @@
 
 <nav id="nav">
   <div class="wrap">
-    <a class="brand" href="../index.html" aria-label="Azimuth North home">
+    <a class="brand tap-target" href="../index.html" aria-label="Azimuth North home">
       <svg viewBox="0 0 100 100" aria-hidden="true"><circle cx="50" cy="50" r="46" fill="none" stroke="#bf9b56" stroke-width="1" opacity=".5" stroke-dasharray="1.5 4.5"/><path d="M50 10 L56 50 L50 50 Z" fill="#bf9b56"/><path d="M50 10 L44 50 L50 50 Z" fill="none" stroke="#bf9b56" stroke-width="1"/><path d="M50 90 L56 50 L50 50 Z M10 50 L50 44 L50 50 Z M90 50 L50 56 L50 50 Z" fill="#efe6d0" opacity=".6"/><line x1="50" y1="50" x2="70" y2="30" stroke="#a03325" stroke-width="2.5" stroke-linecap="round"/></svg>
       <span class="wm-stack"><span class="wm">AZIMUTH&nbsp;NORTH<sup class="deg">°</sup></span><span class="wm-sub">Veteran-Led · Consulting + AI Implementation</span></span>
     </a>
-    <div class="nav-links">
-      <a href="../index.html#capabilities">What we do</a>
-      <a href="../index.html#process">How we work</a>
-      <a href="../library.html" class="active">Library</a>
-      <a href="../about.html">About</a>
+    <div class="nav-right">
+      <div class="nav-links" id="navLinks">
+        <a href="../index.html#capabilities">What we do</a>
+        <a href="../index.html#process">How we work</a>
+        <a href="../library.html" class="active">Library</a>
+        <a href="../about.html">About</a>
+      </div>
       <a href="https://cal.com/nicholas-vandam-gm8vid/30min" target="_blank" rel="noopener" class="nav-cta" data-cal-namespace="30min" data-cal-link="nicholas-vandam-gm8vid/30min" data-cal-config='{"layout":"month_view"}'>Book a call</a>
+      <button class="nav-toggle" id="navToggle" type="button" aria-expanded="false" aria-controls="navLinks" aria-label="Open menu">
+        <span></span><span></span><span></span>
+      </button>
     </div>
   </div>
 </nav>
@@ -115,9 +120,30 @@
 <footer>
   <div class="wrap">
     <span class="coords">AZIMUTH NORTH° · VETERAN-LED · MMXXVI</span>
-    <span><a href="../library.html">The Library</a> · <a href="mailto:info@azimuth-north.com">info@azimuth-north.com</a></span>
+    <span><a class="tap-target" href="../library.html">The Library</a> · <a class="tap-target" href="mailto:info@azimuth-north.com">info@azimuth-north.com</a></span>
   </div>
 </footer>
+
+<!-- mobile nav toggle -->
+<script>
+(function(){
+  const navToggle = document.getElementById('navToggle');
+  const navEl = document.getElementById('nav');
+  if(!navToggle) return;
+  navToggle.addEventListener('click', ()=>{
+    const open = navEl.classList.toggle('open');
+    navToggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+  });
+  document.querySelectorAll('#navLinks a').forEach(a=>{
+    a.addEventListener('click', ()=>{ navEl.classList.remove('open'); navToggle.setAttribute('aria-expanded','false'); });
+  });
+  document.addEventListener('keydown', e=>{
+    if(e.key === 'Escape' && navEl.classList.contains('open')){
+      navEl.classList.remove('open'); navToggle.setAttribute('aria-expanded','false'); navToggle.focus();
+    }
+  });
+})();
+</script>
 
 <!-- Cal.com booking popup -->
 <script>
