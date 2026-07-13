@@ -12,7 +12,7 @@
 <link rel="manifest" href="/site.webmanifest">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400;1,9..144,500&family=Space+Grotesk:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&family=Caveat:wght@500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400;1,9..144,500&family=Space+Grotesk:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&family=Great+Vibes&display=swap" rel="stylesheet">
 <!-- warm up the next pages so navigation feels instant -->
 <link rel="prefetch" href="library.html">
 <link rel="prefetch" href="about.html">
@@ -145,14 +145,14 @@ h1 .type-sizer{visibility:hidden}
 h1 .type-live{position:absolute;inset:0}
 html:not(.js) h1 .type-sizer{visibility:visible}
 html:not(.js) h1 .type-live{display:none}
-h1 .hand{display:block;font-family:'Caveat',cursive;font-style:normal;font-weight:500;color:var(--brass);font-size:1.04em;line-height:.95;letter-spacing:.01em;margin-top:.04em;transform:rotate(-1.2deg);transform-origin:left bottom}
+h1 .hand{display:block;font-family:'Great Vibes',cursive;font-style:normal;font-weight:400;color:var(--brass);font-size:1.14em;line-height:1.02;letter-spacing:0;margin-top:.04em;transform:rotate(-1.2deg);transform-origin:left bottom}
 #typeCaret{display:inline-block;width:3px;height:.72em;margin-left:.08em;background:var(--brass);vertical-align:baseline;transform:translateY(.06em);animation:caretBlink 1.05s steps(1) infinite}
 #typeCaret.off{display:none}
 @keyframes caretBlink{50%{opacity:0}}
-.hword{display:inline-block;white-space:nowrap}
-.hchar{display:inline-block;opacity:0;transform:translateY(.06em) rotate(2deg);clip-path:inset(-.3em 100% -.4em -.05em);transition:clip-path .2s ease-out,opacity .14s linear,transform .34s cubic-bezier(.22,1,.36,1)}
-h1 .hand.written .hchar{opacity:1;transform:none;clip-path:inset(-.3em -.12em -.4em -.05em)}
-h1 .hand.instant .hchar{transition:none}
+/* each word wipes on left-to-right like a pen stroke; cursive joins stay intact */
+.hword{display:inline-block;white-space:nowrap;clip-path:inset(-.45em 100% -.55em -.2em);transition-property:clip-path;transition-timing-function:linear}
+h1 .hand.written .hword{clip-path:inset(-.45em -.25em -.55em -.2em)}
+h1 .hand.instant .hword{transition:none !important}
 .hero-sub{font-size:20px;line-height:1.6;color:rgba(239,230,208,.72);max-width:520px;margin-bottom:46px}
 .cta-row{display:flex;gap:20px;flex-wrap:wrap;align-items:center}
 .btn{position:relative;display:inline-flex;align-items:center;gap:12px;font-family:var(--mono);font-size:12.5px;letter-spacing:.22em;text-transform:uppercase;text-decoration:none;padding:18px 34px;border-radius:2px;transition:transform .2s ease;will-change:transform}
@@ -367,7 +367,7 @@ footer a:hover{color:var(--brass)}
   *,*::before,*::after{animation-duration:.01ms !important;animation-iteration-count:1 !important;transition-duration:.01ms !important}
   .rv{opacity:1 !important;transform:none !important}
   .thesis .fade{opacity:1 !important}
-  .hchar{opacity:1 !important;transform:none !important;clip-path:none !important}
+  .hword{clip-path:none !important}
   #typeCaret{display:none !important}
   #loader{display:none}
   .scroll-hint .line{animation:none}
@@ -848,18 +848,16 @@ const startHeadline = (function(){
   const handEl  = document.getElementById('handTxt');
   const TYPE_LINE = 'Software fitted to the\u00A0terrain';
   const HAND_LINE = 'you already operate on.';
+  const PEN = 62; // ms per character — constant pen speed
   let ci = 0;
   HAND_LINE.split(' ').forEach((word, wi) => {
     if(wi){ handEl.appendChild(document.createTextNode(' ')); ci++; }
     const w = document.createElement('span');
     w.className = 'hword';
-    word.split('').forEach(ch => {
-      const s = document.createElement('span');
-      s.className = 'hchar';
-      s.textContent = ch;
-      s.style.transitionDelay = (ci++ * 36) + 'ms';
-      w.appendChild(s);
-    });
+    w.textContent = word;
+    w.style.transitionDelay = (ci * PEN) + 'ms';
+    w.style.transitionDuration = (word.length * PEN) + 'ms';
+    ci += word.length;
     handEl.appendChild(w);
   });
   return function(instant){
