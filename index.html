@@ -154,7 +154,7 @@ h1 .hand{display:block;font-family:'Great Vibes',cursive;font-style:normal;font-
 #typeCaret.fade{animation:none;opacity:0}
 @keyframes caretBlink{50%{opacity:0}}
 /* each word wipes on left-to-right like a pen stroke; gentle in-out = pen accelerates and settles */
-.hword{display:inline-block;white-space:nowrap;clip-path:inset(-.45em 100% -.55em -.2em);transition-property:clip-path;transition-timing-function:cubic-bezier(.45,.05,.55,.95)}
+.hword{display:inline-block;white-space:nowrap;clip-path:inset(-.45em calc(100% + .2em) -.55em -.2em);transition-property:clip-path;transition-timing-function:cubic-bezier(.45,.05,.55,.95)}
 h1 .hand.written .hword{clip-path:inset(-.45em -.25em -.55em -.2em)}
 h1 .hand.instant .hword{transition:none !important}
 /* while the headline plays, the rest of the hero waits its turn, then rises in */
