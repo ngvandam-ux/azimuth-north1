@@ -12,7 +12,7 @@
 <link rel="manifest" href="/site.webmanifest">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400;1,9..144,500&family=Space+Grotesk:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400;1,9..144,500&family=Space+Grotesk:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&family=Caveat:wght@500;600&display=swap" rel="stylesheet">
 <!-- warm up the next pages so navigation feels instant -->
 <link rel="prefetch" href="library.html">
 <link rel="prefetch" href="about.html">
@@ -139,11 +139,20 @@ nav.open .nav-toggle span:nth-child(3){transform:translateY(-7px) rotate(-45deg)
 .hero-plate{color:var(--brass);font-family:var(--mono);font-size:11px;letter-spacing:.34em;text-transform:uppercase;display:flex;align-items:center;gap:16px}
 .hero-plate::before{content:"";width:44px;height:1px;background:var(--brass-dim)}
 h1{font-family:var(--disp);font-weight:500;font-size:clamp(46px,7.4vw,100px);line-height:.98;letter-spacing:-.02em;margin:30px 0 32px;max-width:13ch}
-h1 .word{display:inline-block;overflow:hidden;vertical-align:top;padding-bottom:.08em;margin-bottom:-.08em}
-h1 .word span{display:inline-block;transition:transform 1s cubic-bezier(.22,1,.36,1)}
-html.js body:not(.loaded) h1 .word span{transform:translateY(115%)}
-body.loaded h1 .word span{transform:none}
-h1 em{font-style:italic;font-weight:400;color:var(--brass)}
+/* typed line + handwritten line: sizer holds final layout, live layer animates over it */
+h1{position:relative}
+h1 .type-sizer{visibility:hidden}
+h1 .type-live{position:absolute;inset:0}
+html:not(.js) h1 .type-sizer{visibility:visible}
+html:not(.js) h1 .type-live{display:none}
+h1 .hand{display:block;font-family:'Caveat',cursive;font-style:normal;font-weight:500;color:var(--brass);font-size:1.04em;line-height:.95;letter-spacing:.01em;margin-top:.04em;transform:rotate(-1.2deg);transform-origin:left bottom}
+#typeCaret{display:inline-block;width:3px;height:.72em;margin-left:.08em;background:var(--brass);vertical-align:baseline;transform:translateY(.06em);animation:caretBlink 1.05s steps(1) infinite}
+#typeCaret.off{display:none}
+@keyframes caretBlink{50%{opacity:0}}
+.hword{display:inline-block;white-space:nowrap}
+.hchar{display:inline-block;opacity:0;transform:translateY(.06em) rotate(2deg);clip-path:inset(-.3em 100% -.4em -.05em);transition:clip-path .2s ease-out,opacity .14s linear,transform .34s cubic-bezier(.22,1,.36,1)}
+h1 .hand.written .hchar{opacity:1;transform:none;clip-path:inset(-.3em -.12em -.4em -.05em)}
+h1 .hand.instant .hchar{transition:none}
 .hero-sub{font-size:20px;line-height:1.6;color:rgba(239,230,208,.72);max-width:520px;margin-bottom:46px}
 .cta-row{display:flex;gap:20px;flex-wrap:wrap;align-items:center}
 .btn{position:relative;display:inline-flex;align-items:center;gap:12px;font-family:var(--mono);font-size:12.5px;letter-spacing:.22em;text-transform:uppercase;text-decoration:none;padding:18px 34px;border-radius:2px;transition:transform .2s ease;will-change:transform}
@@ -358,7 +367,8 @@ footer a:hover{color:var(--brass)}
   *,*::before,*::after{animation-duration:.01ms !important;animation-iteration-count:1 !important;transition-duration:.01ms !important}
   .rv{opacity:1 !important;transform:none !important}
   .thesis .fade{opacity:1 !important}
-  h1 .word span{transform:none !important}
+  .hchar{opacity:1 !important;transform:none !important;clip-path:none !important}
+  #typeCaret{display:none !important}
   #loader{display:none}
   .scroll-hint .line{animation:none}
 }
@@ -459,12 +469,9 @@ footer a:hover{color:var(--brass)}
   <canvas id="terrain" aria-hidden="true"></canvas>
 
   <div class="wrap hero-inner">
-    <h1 id="headline">
-      <span class="word"><span>Software</span></span>
-      <span class="word"><span>fitted&nbsp;to</span></span>
-      <span class="word"><span>the&nbsp;terrain</span></span>
-      <span class="word"><span><em>you&nbsp;already</em></span></span>
-      <span class="word"><span><em>operate&nbsp;on.</em></span></span>
+    <h1 id="headline" aria-label="Software fitted to the terrain you already operate on.">
+      <span class="type-sizer" aria-hidden="true">Software fitted to the&nbsp;terrain<em class="hand">you already operate on.</em></span>
+      <span class="type-live" aria-hidden="true"><span id="typedTxt"></span><span id="typeCaret"></span><em class="hand" id="handTxt"></em></span>
     </h1>
     <p class="hero-sub rv rv-d2 in">Azimuth North is a veteran-led consulting and AI-implementation firm. We find the friction in your processes and systems, then build the software and AI tooling that removes it — fitted to how your business already runs.</p>
     <div class="cta-row rv rv-d3 in">
@@ -834,12 +841,54 @@ function TerrainField(canvas, opts){
 TerrainField(document.getElementById('terrain'), {cell:16, levels:9, scan:false});
 TerrainField(document.getElementById('ctaTerrain'), {cell:20, levels:7, baseAlpha:.1, mouse:true});
 
+/* ================= headline: machine types the software, a hand writes the operation ================= */
+const startHeadline = (function(){
+  const typedEl = document.getElementById('typedTxt');
+  const caretEl = document.getElementById('typeCaret');
+  const handEl  = document.getElementById('handTxt');
+  const TYPE_LINE = 'Software fitted to the\u00A0terrain';
+  const HAND_LINE = 'you already operate on.';
+  let ci = 0;
+  HAND_LINE.split(' ').forEach((word, wi) => {
+    if(wi){ handEl.appendChild(document.createTextNode(' ')); ci++; }
+    const w = document.createElement('span');
+    w.className = 'hword';
+    word.split('').forEach(ch => {
+      const s = document.createElement('span');
+      s.className = 'hchar';
+      s.textContent = ch;
+      s.style.transitionDelay = (ci++ * 36) + 'ms';
+      w.appendChild(s);
+    });
+    handEl.appendChild(w);
+  });
+  return function(instant){
+    if(instant){
+      typedEl.textContent = TYPE_LINE;
+      caretEl.classList.add('off');
+      handEl.classList.add('instant','written');
+      return;
+    }
+    let i = 0;
+    (function tick(){
+      typedEl.textContent = TYPE_LINE.slice(0, ++i);
+      if(i < TYPE_LINE.length){
+        setTimeout(tick, 30 + Math.random() * 34);
+      } else {
+        // beat, then the caret yields to the pen
+        setTimeout(() => { caretEl.classList.add('off'); handEl.classList.add('written'); }, 460);
+      }
+    })();
+  };
+})();
+
 /* ================= preloader ================= */
 const loader = document.getElementById('loader');
 if(reduce || sessionStorage.getItem('az_seen')){
   // already seen this visit (or reduced motion) — skip straight in
   loader.style.display = 'none';
   document.body.classList.add('loaded');
+  startHeadline(true);
 } else {
   try{ sessionStorage.setItem('az_seen','1'); }catch(e){}
   const arc = document.getElementById('dialArc');
@@ -855,7 +904,7 @@ if(reduce || sessionStorage.getItem('az_seen')){
     num.textContent = '047.0';
     arc.style.transition = 'stroke-dashoffset .4s cubic-bezier(.22,1,.36,1)';
     arc.style.strokeDashoffset = '0';
-    setTimeout(()=>{ loader.classList.add('done'); document.body.classList.add('loaded'); }, 150);
+    setTimeout(()=>{ loader.classList.add('done'); document.body.classList.add('loaded'); setTimeout(()=>startHeadline(false), 220); }, 150);
   }
   (function sweep(now){
     const t = Math.min((now - t0)/DUR, 1);
